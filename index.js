@@ -26,6 +26,7 @@ var connection = mysql.createConnection({
 app.use(express.static(__dirname + '/js'));
 //Store all HTML files in view folder.
 app.use(express.static(__dirname + '/views'));
+app.use(express.static(__dirname + '/vendor'));
 app.use("/styles", express.static(__dirname + '/css'));
 
 app.engine('html', require('ejs').renderFile);

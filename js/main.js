@@ -7,7 +7,7 @@ $( document ).ready(function() {
 	  type: 'GET',
 	  success: function(response) {
 	  	if(response.status=="success"){
-	  		alert("product fetched successfully")
+	  		//alert("product fetched successfully")
 		    response.data.forEach(function(row){
 		    	for(var key in row){
 		    		if(row[key]==undefined || row[key]==null)
@@ -36,7 +36,8 @@ $( document ).ready(function() {
 		  data: {"orderID":orderID,"createdTillNow":createdTillNow},
 		  success: function(response) {
 		  	if(response.status=="success"){
-		  		alert("order status updated successfully")
+		  		//alert("order status updated successfully")
+		  		window.location.reload(false);
 		  	}
 		  	else{
 		  		alert("Could not update status! Try Again.")
@@ -47,6 +48,7 @@ $( document ).ready(function() {
 		    alert(e.message + "-order not updated");
 		  }
 		});
+		localStorage.setItem('a',  (Math.random() * 999999));
 	})
 
 	$("#btnReport").click(function(){
@@ -76,6 +78,10 @@ $( document ).ready(function() {
 		});
 	})
 
+	 $(window).bind('storage', function (e) {
+	     console.log(e.originalEvent.key, e.originalEvent.newValue);
+	     window.location.reload(false);
+	 });
 
 });
 

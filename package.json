@@ -1,7 +1,7 @@
 {
-  "name": "fassos",
+  "name": "kitchen-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "Kitchen App to add products and place orders and download report",
   "main": "index.js",
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -20,5 +20,13 @@
     "start": "node index.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/udit04/Kitchen-App.git"
+  },
+  "bugs": {
+    "url": "https://github.com/udit04/Kitchen-App/issues"
+  },
+  "homepage": "https://github.com/udit04/Kitchen-App#readme"
 }
