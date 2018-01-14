@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src='./order.js'></script>
+</head>
+<body>
+
+    <div>
+        <h1>Insert Product and Predicted Value</h1>
+
+        <table border="1" width="100%">
+            <tr>
+                <th>Name</th>
+                <th>Predicted Values</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td><input type="text" id='txtProductName' placeholder="Enter product name" name=""></td>
+                <td><input type="number" id='txtProductValue' placeholder="Enter predicted values" name=""></td>
+                <td><button id='btnAddProduct'>Add product</button></td>
+            </tr>
+        </table>
+
+        <h1>Place Order</h1>
+
+        <table border="1" width="100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th></th>
+                </tr>
+            </thead>
+            
+            <tbody id='tblProducts'>
+                <tr>
+                    <td>
+                        <select id='products'>
+                            <option value="-1" selected="">Select Product Name</option>
+                        </select>
+                    </td>
+                    <td><input type="number" id='txtProductQty' placeholder="Enter Quantity" name=""></td>
+                    <td><button id='btnPlaceOrder'>Place Order</button></td>
+                </tr>
+            </tbody>
+            
+        </table>
+
+    </div>
+
+</body>
+</html>
