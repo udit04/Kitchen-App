@@ -1,9 +1,11 @@
-
+if(baseUrl.indexOf("localhost") >-1){
+	baseUrl = "http://"+baseUrl
+}
 
 $( document ).ready(function() {
 
 	$.ajax({
-	  url: "http://localhost:5000"+'/fetch/orders',
+	  url: baseUrl+'/fetch/orders',
 	  type: 'GET',
 	  success: function(response) {
 	  	if(response.status=="success"){
@@ -22,7 +24,7 @@ $( document ).ready(function() {
 	  	}
 	  },
 	  error: function(e) {
-	    alert(e.message + " orders could not be fetched");
+	    alert("Some server occured ! Orders could not be fetched");
 	  }
 	});
 
@@ -31,13 +33,13 @@ $( document ).ready(function() {
 		var createdTillNow = $(this).parent().parent().find("td").eq(3).text();
 
 		$.ajax({
-		  url: "http://localhost:5000"+'/confirm-order',
+		  url: baseUrl+'/confirm-order',
 		  type: 'POST',
 		  data: {"orderID":orderID,"createdTillNow":createdTillNow},
 		  success: function(response) {
 		  	if(response.status=="success"){
 		  		//alert("order status updated successfully")
-		  		window.location.reload(false);
+		  		window.location.reload();
 		  	}
 		  	else{
 		  		alert("Could not update status! Try Again.")
@@ -45,7 +47,7 @@ $( document ).ready(function() {
 		  	}
 		  },
 		  error: function(e) {
-		    alert(e.message + "-order not updated");
+		    alert("Some server occured ! Orders could not be fetched");
 		  }
 		});
 		localStorage.setItem('a',  (Math.random() * 999999));
@@ -53,7 +55,7 @@ $( document ).ready(function() {
 
 	$("#btnReport").click(function(){
 		$.ajax({
-		  url: "http://localhost:5000"+'/fetch/products',
+		  url: baseUrl+'/fetch/products',
 		  type: 'GET',
 		  success: function(response) {
 		  	if(response.status=="success"){

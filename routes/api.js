@@ -1,11 +1,14 @@
 module.exports = function(settings){
-
 	var app = settings.app;
 	var connection = settings.connection;
-	app.get("/sign-in",function(req,res){
-		res.send("Sign-in here")
-	})
 
+	/*
+		@apiName - insert/product
+		@params -> pName - product name
+		@params -> pValue - product predcited value
+		@success - string "success"
+		@fail - string "fail"
+	*/
 	app.post("/insert/product",function(req,res){
 		var pName = req.body.pName || null;
 		var pValue = req.body.pValue || null;
@@ -17,7 +20,6 @@ module.exports = function(settings){
 			})
 			return;
 		}
-
 		connection.query('insert into faasoskitchen (ProductName,Predicted) values (?,?)', [pName,pValue], function(err, result) {
 			if(err){
 				res.json({
@@ -32,9 +34,13 @@ module.exports = function(settings){
 			})
 			return;    
 	    })
-
 	})
 
+	/*
+		@apiName - fetch/products
+		@success - string "success" with data
+		@fail - string "fail"
+	*/
 	app.get("/fetch/products",function(req,res){
 		connection.query('select * from faasoskitchen', function(err, rows, fields) {
 			if(err){
@@ -64,6 +70,13 @@ module.exports = function(settings){
 	    })
 	})
 
+	/*
+		@apiName - place-order
+		@params -> pID - product ID
+		@params -> pQty - product quantity
+		@success - string "success"
+		@fail - string "fail"
+	*/
 	app.post("/place-order",function(req,res){
 		var pID = req.body.pID || null;
 		var pQty = req.body.pQty || null;
@@ -75,7 +88,6 @@ module.exports = function(settings){
 			})
 			return;
 		}
-
 		connection.query('insert into FaasosKitchenOrders (ProductID,Quantity) values (?,?)', [pID,pQty], function(err, result) {
 			if(err){
 				res.json({
@@ -92,6 +104,11 @@ module.exports = function(settings){
 	    })
 	})
 
+	/*
+		@apiName - /fetch/orders
+		@success - string "success" with data
+		@fail - string "fail"
+	*/
 	app.get("/fetch/orders",function(req,res){
 		connection.query('select * from faasoskitchen fk inner join faasoskitchenorders fko on fk.ProductID = fko.ProductID', function(err, rows, fields) {
 			console.log(this.sql)
@@ -122,6 +139,13 @@ module.exports = function(settings){
 	    })
 	})
 
+	/*
+		@apiName - /confirm-order
+		@params -> orderID - Order Number
+		@params -> createdTillNow - No of products created till now
+		@success - string "success"
+		@fail - string "fail"
+	*/
 	app.post("/confirm-order",function(req,res){
 		var orderID = req.body.orderID || null;
 		var createdTillNow = req.body.createdTillNow || null;
@@ -132,6 +156,7 @@ module.exports = function(settings){
 			})
 			return;
 		}
+		//selecting orders from table based on order ID
 		connection.query('select * from faasoskitchenorders where OrderID = ?', [orderID], function(err, rows, fields) {
 			if(err){
 				res.json({
@@ -155,6 +180,7 @@ module.exports = function(settings){
 				}
 				else
 					var newValue = parseInt(pQty) + parseInt(createdTillNow);
+				// updating main table data with refernce to product id
 				connection.query('update faasoskitchen set CreatedTillNow = ? where ProductID = ?', [newValue,productID], function(err, result) {
 					if(err){
 						res.json({
@@ -163,6 +189,7 @@ module.exports = function(settings){
 						})
 						return;
 					}
+					// deleting order from orders table as there is no need of that data
 					connection.query('delete from faasoskitchenorders where orderID = ?', [orderID], function(err, result) {
 						console.log(this.sql)
 						if(err){
@@ -182,6 +209,5 @@ module.exports = function(settings){
 			}   
 	    })
 	})
-
 
 }

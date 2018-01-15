@@ -1,9 +1,12 @@
 
-
+//console.log(baseUrl)
+console.log(baseUrl)
+if(baseUrl.indexOf("localhost") >-1){
+	baseUrl = "http://"+baseUrl
+}
 $( document ).ready(function() {
-
 	$.ajax({
-	  url: "http://localhost:5000"+'/fetch/products',
+	  url: baseUrl+'/fetch/products',
 	  type: 'GET',
 	  success: function(response) {
 	  	if(response.status=="success"){
@@ -34,12 +37,13 @@ $( document ).ready(function() {
 			return;
 		}
 		$.ajax({
-		  url: "http://localhost:5000"+'/insert/product',
+		  url: baseUrl+'/insert/product',
 		  type: 'POST',
 		  data: {"pName":pName,"pValue":pValue},
 		  success: function(response) {
 		  	if(response.status=="success"){
-		  		alert("product inserted successfully")
+		  		alert("product inserted successfully");
+		  		window.location.reload();
 		  	}
 		  	else{
 		  		alert("Could not insert product! Try Again.")
@@ -62,7 +66,7 @@ $( document ).ready(function() {
 			return;
 		}
 		$.ajax({
-		  url: "http://localhost:5000"+'/place-order',
+		  url: baseUrl+'/place-order',
 		  type: 'POST',
 		  data: {"pID":pID,"pQty":pQty},
 		  success: function(response) {
