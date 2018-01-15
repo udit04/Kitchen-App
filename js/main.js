@@ -1,7 +1,8 @@
 if(baseUrl.indexOf("localhost") >-1){
 	baseUrl = "http://"+baseUrl
 }
-
+else
+	baseUrl = "";
 $( document ).ready(function() {
 
 	$.ajax({
