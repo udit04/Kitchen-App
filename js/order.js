@@ -68,7 +68,7 @@ $( document ).ready(function() {
 	})
 
 	$("#btnHome").click(function(){
-		window.location = "/";
+		window.location = "https://radiant-woodland-68601.herokuapp.com";
 	})
 
 });
