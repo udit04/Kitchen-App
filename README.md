@@ -5,8 +5,8 @@ Kitchen App to add products and place orders and download report
 
 1) The App has two html pages
 
-	1) The main page that displays kitchen's live orders
-	2) The secondary page that allows you to insert products and place orders
+	1) The main page that displays kitchen's live orders ("baseUrl")
+	2) The secondary page that allows you to insert products and place orders ("baseUrl/order")
 
 2) Directory Structure
 

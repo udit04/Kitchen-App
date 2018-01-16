@@ -8,6 +8,7 @@ $( document ).ready(function() {
 	load();
 
 	// dynamic click handler to handle status updation of live order
+	// this removes the live order from main kitchen display
     $("#tblOrders").on("click","#btnStatusUpdate",function(){
 		var orderID = $(this).parent().parent().find("td").eq(0).text();
 		var createdTillNow = $(this).parent().parent().find("td").eq(3).text();
