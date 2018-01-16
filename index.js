@@ -7,7 +7,15 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // sample config of mysql
-var connection = mysql.createConnection({
+// var connection = mysql.createConnection({
+//     host : 'us-cdbr-iron-east-05.cleardb.net',
+//     user : 'b5837b0f1d3d06',
+//     password : '9d9ae3d5',
+//     database : 'heroku_db89e2842543609'
+// });
+
+var connectionPool  = mysql.createPool({
+    connectionLimit : 5,
     host : 'us-cdbr-iron-east-05.cleardb.net',
     user : 'b5837b0f1d3d06',
     password : '9d9ae3d5',
@@ -46,11 +54,11 @@ app.get('/order', function(req, res) {
 // all config and settings being passed in required files
 var settings = {
 	app: app,
-	connection: connection
+	connectionPool: connectionPool
 }
 
 require(__dirname + "/routes/api.js")(settings);
 
 app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+  console.log('Fassos Kitchen app is running on port', app.get('port'));
 });

@@ -1,6 +1,6 @@
 module.exports = function(settings){
 	var app = settings.app;
-	var connection = settings.connection;
+	var connectionPool = settings.connectionPool;
 
 	/*
 		@apiName - insert/product
@@ -20,7 +20,7 @@ module.exports = function(settings){
 			})
 			return;
 		}
-		connection.query('insert into faasoskitchen (ProductName,Predicted) values (?,?)', [pName,pValue], function(err, result) {
+		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
 					status:"fail",
@@ -28,12 +28,22 @@ module.exports = function(settings){
 				})
 				return;
 			}
-			res.json({
-				status:"success",
-				message : "product inserted successfully"
-			})
-			return;    
-	    })
+			connection.query('insert into faasoskitchen (ProductName,Predicted) values (?,?)', [pName,pValue], function(err, result) {
+				connection.release();
+				if(err){
+					res.json({
+						status:"fail",
+						message : "some server error occured"
+					})
+					return;
+				}
+				res.json({
+					status:"success",
+					message : "product inserted successfully"
+				})
+				return;    
+		    })
+		});	
 	})
 
 	/*
@@ -42,7 +52,7 @@ module.exports = function(settings){
 		@fail - string "fail"
 	*/
 	app.get("/fetch/products",function(req,res){
-		connection.query('select * from faasoskitchen', function(err, rows, fields) {
+		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
 					status:"fail",
@@ -50,24 +60,34 @@ module.exports = function(settings){
 				})
 				return;
 			}
-			if(rows.length<1){
-				res.json({
-					status:"fail",
-					message : "no records found"
+			connection.query('select * from faasoskitchen', function(err, rows, fields) {
+				connection.release();
+				if(err){
+					res.json({
+						status:"fail",
+						message : "some server error occured"
+					})
+					return;
+				}
+				if(rows.length<1){
+					res.json({
+						status:"fail",
+						message : "no records found"
+					})
+					return;
+				}
+				var data = [];
+				rows.forEach(function(row){
+					data.push(row)
 				})
-				return;
-			}
-			var data = [];
-			rows.forEach(function(row){
-				data.push(row)
-			})
-			res.json({
-				data: data,
-				status:"success",
-				message : "product fetched successfully"
-			})
-			return;    
-	    })
+				res.json({
+					data: data,
+					status:"success",
+					message : "product fetched successfully"
+				})
+				return;    
+		    })
+		});	
 	})
 
 	/*
@@ -88,7 +108,7 @@ module.exports = function(settings){
 			})
 			return;
 		}
-		connection.query('insert into FaasosKitchenOrders (ProductID,Quantity) values (?,?)', [pID,pQty], function(err, result) {
+		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
 					status:"fail",
@@ -96,12 +116,22 @@ module.exports = function(settings){
 				})
 				return;
 			}
-			res.json({
-				status:"success",
-				message : "order placed successfully"
-			})
-			return;    
-	    })
+			connection.query('insert into FaasosKitchenOrders (ProductID,Quantity) values (?,?)', [pID,pQty], function(err, result) {
+				connection.release();
+				if(err){
+					res.json({
+						status:"fail",
+						message : "some server error occured"
+					})
+					return;
+				}
+				res.json({
+					status:"success",
+					message : "order placed successfully"
+				})
+				return;    
+		    })
+		});	
 	})
 
 	/*
@@ -110,8 +140,7 @@ module.exports = function(settings){
 		@fail - string "fail"
 	*/
 	app.get("/fetch/orders",function(req,res){
-		connection.query('select * from faasoskitchen fk inner join faasoskitchenorders fko on fk.ProductID = fko.ProductID', function(err, rows, fields) {
-			console.log(this.sql)
+		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
 					status:"fail",
@@ -119,24 +148,35 @@ module.exports = function(settings){
 				})
 				return;
 			}
-			if(rows.length<1){
-				res.json({
-					status:"fail",
-					message : "no records found"
+			connection.query('select * from faasoskitchen fk inner join faasoskitchenorders fko on fk.ProductID = fko.ProductID', function(err, rows, fields) {
+				console.log(this.sql)
+				connection.release();
+				if(err){
+					res.json({
+						status:"fail",
+						message : "some server error occured"
+					})
+					return;
+				}
+				if(rows.length<1){
+					res.json({
+						status:"fail",
+						message : "no records found"
+					})
+					return;
+				}
+				var data = [];
+				rows.forEach(function(row){
+					data.push(row)
 				})
-				return;
-			}
-			var data = [];
-			rows.forEach(function(row){
-				data.push(row)
-			})
-			res.json({
-				data: data,
-				status:"success",
-				message : "product fetched successfully"
-			})
-			return;    
-	    })
+				res.json({
+					data: data,
+					status:"success",
+					message : "product fetched successfully"
+				})
+				return;    
+		    })
+		});
 	})
 
 	/*
@@ -156,8 +196,7 @@ module.exports = function(settings){
 			})
 			return;
 		}
-		//selecting orders from table based on order ID
-		connection.query('select * from faasoskitchenorders where OrderID = ?', [orderID], function(err, rows, fields) {
+		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
 					status:"fail",
@@ -165,49 +204,63 @@ module.exports = function(settings){
 				})
 				return;
 			}
-			if(rows.length<1){
-				res.json({
-					status:"fail",
-					message : "no records found"
-				})
-				return;
-			}
-			else{
-				var productID = rows[0]["ProductID"];
-				var pQty = rows[0]["Quantity"];
-				if(createdTillNow==null || createdTillNow == "0" ||  createdTillNow == 0){
-					var newValue = pQty;
+			//selecting orders from table based on order ID
+			connection.query('select * from faasoskitchenorders where OrderID = ?', [orderID], function(err, rows, fields) {
+				if(err){
+					connection.release();
+					res.json({
+						status:"fail",
+						message : "some server error occured"
+					})
+					return;
 				}
-				else
-					var newValue = parseInt(pQty) + parseInt(createdTillNow);
-				// updating main table data with refernce to product id
-				connection.query('update faasoskitchen set CreatedTillNow = ? where ProductID = ?', [newValue,productID], function(err, result) {
-					if(err){
-						res.json({
-							status:"fail",
-							message : "some server error occured"
-						})
-						return;
+				if(rows.length<1){
+					connection.release();
+					res.json({
+						status:"fail",
+						message : "no records found"
+					})
+					return;
+				}
+				else{
+					var productID = rows[0]["ProductID"];
+					var pQty = rows[0]["Quantity"];
+					if(createdTillNow==null || createdTillNow == "0" ||  createdTillNow == 0){
+						var newValue = pQty;
 					}
-					// deleting order from orders table as there is no need of that data
-					connection.query('delete from faasoskitchenorders where orderID = ?', [orderID], function(err, result) {
-						console.log(this.sql)
+					else
+						var newValue = parseInt(pQty) + parseInt(createdTillNow);
+					// updating main table data with refernce to product id
+					connection.query('update faasoskitchen set CreatedTillNow = ? where ProductID = ?', [newValue,productID], function(err, result) {
 						if(err){
+							connection.release();
 							res.json({
 								status:"fail",
 								message : "some server error occured"
 							})
 							return;
 						}
-						res.json({
-							status:"success",
-							message : "status updated successfully"
+						// deleting order from orders table as there is no need of that data
+						connection.query('delete from faasoskitchenorders where orderID = ?', [orderID], function(err, result) {
+							console.log(this.sql)
+							connection.release();
+							if(err){
+								res.json({
+									status:"fail",
+									message : "some server error occured"
+								})
+								return;
+							}
+							res.json({
+								status:"success",
+								message : "status updated successfully"
+							})
+							return; 
 						})
-						return; 
 					})
-				})
-			}   
-	    })
+				}   
+		    })
+		});
 	})
 
 }
