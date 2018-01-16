@@ -7,29 +7,10 @@ if(baseUrl.indexOf("localhost") >-1){
 else
 	baseUrl = "";
 $( document ).ready(function() {
-	$.ajax({
-	  url: baseUrl+'/fetch/products',
-	  type: 'GET',
-	  success: function(response) {
-	  	if(response.status=="success"){
-	  		alert("product fetched successfully")
-	  		console.log(response.data)
-		    response.data.forEach(function(row){
-		    	$("#products").append("<option value='"+row.ProductID+"'>"+row.ProductName+"</option>")
-		    })
-	  	}
-	  	else{
-	  		alert("No products fetched ! Try Adding the products.")
-	  		return;
-	  	}
-	  },
-	  error: function(e) {
-	    alert(e.message + " product could not be fetched");
-	  }
-	});
 
+	load();
 
-
+	// click handler to handle adding of products
     $("#btnAddProduct").click(function(){
 		console.log("in here")
 		var pName = $("#txtProductName").val();
@@ -55,10 +36,10 @@ $( document ).ready(function() {
 		  error: function(e) {
 		    alert(e.message + "-product not inserted successfully");
 		  }
-		}); 
-
+		});
 	})
 
+    // click handler to handle placing of orders
     $("#btnPlaceOrder").click(function(){
 		var pID = $("#products").val();
 		var pQty = $("#txtProductQty").val();
@@ -86,6 +67,33 @@ $( document ).ready(function() {
 		});
 	})
 
+	$("#btnHome").click(function(){
+		window.location = baseUrl;
+	})
 
 });
+
+// function to handle initial loading of products in dropdown
+function load(){
+	$.ajax({
+	  url: baseUrl+'/fetch/products',
+	  type: 'GET',
+	  success: function(response) {
+	  	if(response.status=="success"){
+	  		alert("product fetched successfully")
+	  		console.log(response.data)
+		    response.data.forEach(function(row){
+		    	$("#products").append("<option value='"+row.ProductID+"'>"+row.ProductName+"</option>")
+		    })
+	  	}
+	  	else{
+	  		alert("No products fetched ! Try Adding the products.")
+	  		return;
+	  	}
+	  },
+	  error: function(e) {
+	    alert(e.message + " product could not be fetched");
+	  }
+	});
+}
 

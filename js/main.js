@@ -5,30 +5,9 @@ else
 	baseUrl = "";
 $( document ).ready(function() {
 
-	$.ajax({
-	  url: baseUrl+'/fetch/orders',
-	  type: 'GET',
-	  success: function(response) {
-	  	if(response.status=="success"){
-	  		//alert("product fetched successfully")
-		    response.data.forEach(function(row){
-		    	for(var key in row){
-		    		if(row[key]==undefined || row[key]==null)
-		    			row[key] = "0"
-		    	}
-		    	$("#tblOrders").append("<tr><td>"+row.OrderID+"</td><td>"+row.ProductName+"</td><td>"+row.Quantity+"</td><td>"+row.CreatedTillNow+"</td><td>"+row.Predicted+"</td><td><button id='btnStatusUpdate'>Done</button></td></tr>")
-		    })
-	  	}
-	  	else{
-	  		alert("No orders fetched ! Try Again")
-	  		return;
-	  	}
-	  },
-	  error: function(e) {
-	    alert("Some server occured ! Orders could not be fetched");
-	  }
-	});
+	load();
 
+	// dynamic click handler to handle status updation of live order
     $("#tblOrders").on("click","#btnStatusUpdate",function(){
 		var orderID = $(this).parent().parent().find("td").eq(0).text();
 		var createdTillNow = $(this).parent().parent().find("td").eq(3).text();
@@ -54,6 +33,7 @@ $( document ).ready(function() {
 		localStorage.setItem('a',  (Math.random() * 999999));
 	})
 
+    // click handler to handle report downloading
 	$("#btnReport").click(function(){
 		$.ajax({
 		  url: baseUrl+'/fetch/products',
@@ -81,10 +61,38 @@ $( document ).ready(function() {
 		});
 	})
 
+	// bind function to detect change in localstorage
 	 $(window).bind('storage', function (e) {
-	     console.log(e.originalEvent.key, e.originalEvent.newValue);
-	     window.location.reload(false);
+	     //console.log(e.originalEvent.key, e.originalEvent.newValue);
+	     window.location.reload();
 	 });
 
 });
+
+// function to handle intial loading of initial live orders
+function load(){
+	$.ajax({
+	url: baseUrl+'/fetch/orders',
+	type: 'GET',
+	success: function(response) {
+		if(response.status=="success"){
+			//alert("product fetched successfully")
+	    response.data.forEach(function(row){
+	    	for(var key in row){
+	    		if(row[key]==undefined || row[key]==null)
+	    			row[key] = "0"
+	    	}
+	    	$("#tblOrders").append("<tr><td>"+row.OrderID+"</td><td>"+row.ProductName+"</td><td>"+row.Quantity+"</td><td>"+row.CreatedTillNow+"</td><td>"+row.Predicted+"</td><td><button id='btnStatusUpdate'>Done</button></td></tr>")
+	    })
+		}
+		else{
+			alert("No orders fetched ! Try Again")
+			return;
+		}
+	},
+	error: function(e) {
+	alert("Some server occured ! Orders could not be fetched");
+	}
+	});
+}
 

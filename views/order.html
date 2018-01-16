@@ -9,49 +9,51 @@
     <script type="text/javascript">var baseUrl = "<%= baseUrl %>"</script>
     <script src='./order.js'></script>
 </head>
-<body>
+<body style="background-color: #f2f2f2">
 
     <div>
-        <h1>Insert Product and Predicted Value</h1>
 
-        <table border="1" width="50%" style="text-align: center;">
-            <tr>
-                <th>Name</th>
-                <th>Predicted Values</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td><input type="text" id='txtProductName' placeholder="Enter product name" name=""></td>
-                <td><input type="number" id='txtProductValue' placeholder="Enter predicted values" name=""></td>
-                <td><button id='btnAddProduct'>Add product</button></td>
-            </tr>
-        </table>
-
-        <h1>Place Order</h1>
-
-        <table style="border: 1px solid black; padding: 20px" width="50%">
-            <thead>
+    <div><button id='btnHome' style="background-color: burlywood">Back To Kitchen Display</button></div>
+        <div>
+            <h2>Insert Product and Predicted Value</h2>
+            <table border="1" style="text-align: center;">
                 <tr>
                     <th>Name</th>
-                    <th>Quantity</th>
+                    <th>Predicted Value</th>
                     <th></th>
                 </tr>
-            </thead>
-            
-            <tbody id='tblProducts' style="text-align: center;">
                 <tr>
-                    <td>
-                        <select id='products'>
-                            <option value="-1" selected="">Select Product Name</option>
-                        </select>
-                    </td>
-                    <td><input type="number" id='txtProductQty' placeholder="Enter Quantity" name=""></td>
-                    <td><button id='btnPlaceOrder'>Place Order</button></td>
+                    <td><input type="text" id='txtProductName' placeholder="Enter product name" name=""></td>
+                    <td><input type="number" id='txtProductValue' placeholder="Enter predicted value" name=""></td>
+                    <td><button id='btnAddProduct'>Add product</button></td>
                 </tr>
-            </tbody>
-            
-        </table>
-
+            </table>
+        </div>
+ 
+        <div>
+            <h2>Place Order</h2>
+            <table style="border: 1px solid black; padding: 20px" width="50%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id='tblProducts' style="text-align: center;">
+                    <tr>
+                        <td>
+                            <select id='products'>
+                                <option value="-1" selected="">Select Product Name</option>
+                            </select>
+                        </td>
+                        <td><input type="number" id='txtProductQty' placeholder="Enter Quantity" name=""></td>
+                        <td><button id='btnPlaceOrder'>Place Order</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
     </div>
 
 </body>
