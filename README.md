@@ -11,9 +11,13 @@ Kitchen App to add products and place orders and download report
 2) Directory Structure
 
 	js - contains all html's source js files
+
 	routes - contains all api code
+
 	vendor - contains all helper js files
+
 	views - contains all html code
+	
 	index.js - entry point
 
 3) Table Structures
