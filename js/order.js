@@ -68,7 +68,7 @@ $( document ).ready(function() {
 	})
 
 	$("#btnHome").click(function(){
-		window.location = baseUrl;
+		window.location = "/";
 	})
 
 });
