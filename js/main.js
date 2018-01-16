@@ -4,9 +4,7 @@ if(baseUrl.indexOf("localhost") >-1){
 else
 	baseUrl = "";
 $( document ).ready(function() {
-
 	load();
-
 	// dynamic click handler to handle status updation of live order
 	// this removes the live order from main kitchen display
     $("#tblOrders").on("click","#btnStatusUpdate",function(){
@@ -46,7 +44,7 @@ $( document ).ready(function() {
 			    response.data.forEach(function(row){
 			    	sample = sample + "<tr><td>"+row.ProductName+"</td><td>"+row.CreatedTillNow+"</td><td>"+row.Predicted+"</td></tr>"
 			    })
-			    sample = "<table><thead><tr><th>Dish Name</th><th>Produced</th><th>Predicted</th></tr></thead><tbody>"+sample+"</tbody></table>";
+			    sample = "<h2>Dish Wise Production Report</h2><table><thead><tr><th>Dish Name</th><th>Produced</th><th>Predicted</th></tr></thead><tbody>"+sample+"</tbody></table>";
 			    doc.fromHTML(sample, 20, 20, {
 				});
 				doc.save('Report.pdf');
@@ -67,33 +65,32 @@ $( document ).ready(function() {
 	     //console.log(e.originalEvent.key, e.originalEvent.newValue);
 	     window.location.reload();
 	 });
-
 });
 
 // function to handle intial loading of initial live orders
 function load(){
 	$.ajax({
-	url: baseUrl+'/fetch/orders',
-	type: 'GET',
-	success: function(response) {
-		if(response.status=="success"){
-			//alert("product fetched successfully")
-	    response.data.forEach(function(row){
-	    	for(var key in row){
-	    		if(row[key]==undefined || row[key]==null)
-	    			row[key] = "0"
-	    	}
-	    	$("#tblOrders").append("<tr><td>"+row.OrderID+"</td><td>"+row.ProductName+"</td><td>"+row.Quantity+"</td><td>"+row.CreatedTillNow+"</td><td>"+row.Predicted+"</td><td><button id='btnStatusUpdate'>Done</button></td></tr>")
-	    })
+		url: baseUrl+'/fetch/orders',
+		type: 'GET',
+		success: function(response) {
+			if(response.status=="success"){
+				//alert("product fetched successfully")
+		    response.data.forEach(function(row){
+		    	for(var key in row){
+		    		if(row[key]==undefined || row[key]==null)
+		    			row[key] = "0"
+		    	}
+		    	$("#tblOrders").append("<tr><td>"+row.OrderID+"</td><td>"+row.ProductName+"</td><td>"+row.Quantity+"</td><td>"+row.CreatedTillNow+"</td><td>"+row.Predicted+"</td><td><button id='btnStatusUpdate'>Done</button></td></tr>")
+		    })
+			}
+			else{
+				alert("No orders fetched ! Try Again")
+				return;
+			}
+		},
+		error: function(e) {
+			alert("Some server occured ! Orders could not be fetched");
 		}
-		else{
-			alert("No orders fetched ! Try Again")
-			return;
-		}
-	},
-	error: function(e) {
-	alert("Some server occured ! Orders could not be fetched");
-	}
 	});
 }
 

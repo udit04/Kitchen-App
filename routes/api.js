@@ -1,7 +1,7 @@
 module.exports = function(settings){
+	
 	var app = settings.app;
 	var connectionPool = settings.connectionPool;
-
 	/*
 		@apiName - insert/product
 		@params -> pName - product name
@@ -149,7 +149,6 @@ module.exports = function(settings){
 				return;
 			}
 			connection.query('select * from faasoskitchen fk inner join faasoskitchenorders fko on fk.ProductID = fko.ProductID', function(err, rows, fields) {
-				console.log(this.sql)
 				connection.release();
 				if(err){
 					res.json({
@@ -242,7 +241,6 @@ module.exports = function(settings){
 						}
 						// deleting order from orders table as there is no need of that data
 						connection.query('delete from faasoskitchenorders where orderID = ?', [orderID], function(err, result) {
-							console.log(this.sql)
 							connection.release();
 							if(err){
 								res.json({

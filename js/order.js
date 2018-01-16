@@ -9,7 +9,6 @@ else
 $( document ).ready(function() {
 
 	load();
-
 	// click handler to handle adding of products
     $("#btnAddProduct").click(function(){
 		console.log("in here")
@@ -68,7 +67,7 @@ $( document ).ready(function() {
 	})
 
 	$("#btnHome").click(function(){
-		window.location = "https://radiant-woodland-68601.herokuapp.com";
+		window.location = "/";
 	})
 
 });
