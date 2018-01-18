@@ -24,7 +24,7 @@
                 </tr>
                 <tr>
                     <td><input type="text" id='txtProductName' placeholder="Enter product name" name=""></td>
-                    <td><input type="number" id='txtProductValue' placeholder="Enter predicted value" name=""></td>
+                    <td><input type="number" id='txtProductValue' min='0' placeholder="Enter predicted value" name=""></td>
                     <td><button id='btnAddProduct'>Add product</button></td>
                 </tr>
             </table>
@@ -47,7 +47,7 @@
                                 <option value="-1" selected="">Select Product Name</option>
                             </select>
                         </td>
-                        <td><input type="number" id='txtProductQty' placeholder="Enter Quantity" name=""></td>
+                        <td><input type="number" id='txtProductQty' min='0' placeholder="Enter Quantity" name=""></td>
                         <td><button id='btnPlaceOrder'>Place Order</button></td>
                     </tr>
                 </tbody>
