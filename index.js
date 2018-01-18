@@ -22,10 +22,15 @@ var connectionPool  = mysql.createPool({
     database : 'heroku_db89e2842543609'
 });
 
-app.use(express.static(__dirname + '/js'));
-//Store all HTML files in view folder.
-app.use(express.static(__dirname + '/views'));
-app.use(express.static(__dirname + '/vendor'));
+
+app.use('/public', express.static(__dirname + '/js'));
+app.use('/public', express.static(__dirname + '/views'));
+app.use('/public', express.static(__dirname + '/vendor'));
+
+// app.use(express.static(__dirname + '/js'));
+// //Store all HTML files in view folder.
+// app.use(express.static(__dirname + '/views'));
+// app.use(express.static(__dirname + '/vendor'));
 
 app.engine('html', require('ejs').renderFile);
 
