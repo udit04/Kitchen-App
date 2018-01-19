@@ -1,22 +1,16 @@
 var express = require('express');
 var app = express();
 const redis = require('redis');
-const client = redis.createClient("6379");
+
+const client = redis.createClient("6379"); //hardcoded value of port - original from config file
+
 var bodyParser = require('body-parser')
 app.set('port', (process.env.PORT || 5000));
 var mysql = require('mysql');
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-// sample config of mysql
-// var connection = mysql.createConnection({
-//     host : 'us-cdbr-iron-east-05.cleardb.net',
-//     user : 'b5837b0f1d3d06',
-//     password : '9d9ae3d5',
-//     database : 'heroku_db89e2842543609'
-// });
-
-var connectionPool  = mysql.createPool({
+var connectionPool  = mysql.createPool({ //sample config of mysql
     connectionLimit : 5,
     host : 'us-cdbr-iron-east-05.cleardb.net',
     user : 'b5837b0f1d3d06',
@@ -57,6 +51,8 @@ app.get('/order', function(req, res) {
    //    }    
    //  });
 });
+
+// cache middleware - it serves for fetch requests and returns data if key matches and also has data else process moves on to next middleware.
 
 function cache(req, res, next) {
     var url = req.originalUrl;

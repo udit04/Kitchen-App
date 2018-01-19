@@ -1,9 +1,9 @@
 module.exports = function(settings){
 	
-	var app = settings.app;
-	var connectionPool = settings.connectionPool;
-	var cache = settings.cache;
-	var client = settings.client;
+	var app = settings.app; // express instance
+	var connectionPool = settings.connectionPool; // mysql conenction pool
+	var cache = settings.cache; //middleware function
+	var client = settings.client; //redis client to perform operations
 	/*
 		@apiName - insert/product
 		@params -> pName - product name
@@ -39,12 +39,13 @@ module.exports = function(settings){
 					})
 					return;
 				}
-				client.del("products_fetch");
+				client.del("products_fetch"); // deletes this key so as to fetch data again from db.
 				res.json({
 					status:"success",
 					message : "product inserted successfully"
 				})
 				return;    
+				
 		    })
 		});	
 	})
@@ -83,14 +84,15 @@ module.exports = function(settings){
 				rows.forEach(function(row){
 					data.push(row)
 				})
-				client.set("products_fetch", JSON.stringify(data));
-
+				client.set("products_fetch", JSON.stringify(data)); // sets key with returned data
 				res.json({
 					data: data,
 					status:"success",
 					message : "product fetched successfully"
-				})
-				return;    
+				}) 
+				return;  
+				
+
 		    })
 		});	
 	})
