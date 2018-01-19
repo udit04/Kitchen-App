@@ -7,7 +7,6 @@ if(baseUrl.indexOf("localhost") >-1){
 else
 	baseUrl = "";
 $( document ).ready(function() {
-
 	load();
 	// click handler to handle adding of products
     $("#btnAddProduct").click(function(){

@@ -39,6 +39,7 @@ module.exports = function(settings){
 					})
 					return;
 				}
+				client.del("products_fetch");
 				res.json({
 					status:"success",
 					message : "product inserted successfully"
@@ -82,7 +83,7 @@ module.exports = function(settings){
 				rows.forEach(function(row){
 					data.push(row)
 				})
-				client.setex("products_fetch", 15, JSON.stringify(data));
+				client.set("products_fetch", JSON.stringify(data));
 
 				res.json({
 					data: data,
@@ -172,7 +173,7 @@ module.exports = function(settings){
 				rows.forEach(function(row){
 					data.push(row)
 				})
-				client.setex("orders_fetch", 5, JSON.stringify(data));
+				client.setex("orders_fetch", 10, JSON.stringify(data));
 				res.json({
 					data: data,
 					status:"success",

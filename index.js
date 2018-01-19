@@ -69,9 +69,6 @@ function cache(req, res, next) {
 
         if (data != null) {
           var data  = JSON.parse(data);
-          for(var key in data){
-            console.log(key)
-          }
             res.json({
               data: data,
               status:"success",
