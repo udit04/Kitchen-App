@@ -9,6 +9,7 @@
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "mysql": "^2.15.0",
+    "redis": "^2.8.0",
     "request": "^2.83.0"
   },
   "devDependencies": {},

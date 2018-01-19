@@ -2,6 +2,8 @@ module.exports = function(settings){
 	
 	var app = settings.app;
 	var connectionPool = settings.connectionPool;
+	var cache = settings.cache;
+	var client = settings.client;
 	/*
 		@apiName - insert/product
 		@params -> pName - product name
@@ -51,7 +53,7 @@ module.exports = function(settings){
 		@success - string "success" with data
 		@fail - string "fail"
 	*/
-	app.get("/fetch/products",function(req,res){
+	app.get("/fetch/products",cache,function(req,res){
 		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
@@ -80,6 +82,8 @@ module.exports = function(settings){
 				rows.forEach(function(row){
 					data.push(row)
 				})
+				client.setex("products_fetch", 15, JSON.stringify(data));
+
 				res.json({
 					data: data,
 					status:"success",
@@ -139,7 +143,7 @@ module.exports = function(settings){
 		@success - string "success" with data
 		@fail - string "fail"
 	*/
-	app.get("/fetch/orders",function(req,res){
+	app.get("/fetch/orders",cache,function(req,res){
 		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
@@ -168,6 +172,7 @@ module.exports = function(settings){
 				rows.forEach(function(row){
 					data.push(row)
 				})
+				client.setex("orders_fetch", 5, JSON.stringify(data));
 				res.json({
 					data: data,
 					status:"success",

@@ -1,5 +1,7 @@
 var express = require('express');
 var app = express();
+const redis = require('redis');
+const client = redis.createClient("6379");
 var bodyParser = require('body-parser')
 app.set('port', (process.env.PORT || 5000));
 var mysql = require('mysql');
@@ -56,10 +58,37 @@ app.get('/order', function(req, res) {
    //  });
 });
 
+function cache(req, res, next) {
+    var url = req.originalUrl;
+    if(url =="/fetch/products")
+      var key = "products_fetch"; //hardcoded
+    else if(url == "/fetch/orders")
+      var key = "orders_fetch"; //hardcoded
+    client.get(key, function (err, data) {
+        if (err) throw err;
+
+        if (data != null) {
+          var data  = JSON.parse(data);
+          for(var key in data){
+            console.log(key)
+          }
+            res.json({
+              data: data,
+              status:"success",
+              message : "product fetched successfully"
+            })
+            return;
+        } else {
+            next();
+        }
+    });
+}
 // all config and settings being passed in required files
 var settings = {
 	app: app,
-	connectionPool: connectionPool
+	connectionPool: connectionPool,
+  cache: cache,
+  client: client
 }
 
 require(__dirname + "/routes/api.js")(settings);
