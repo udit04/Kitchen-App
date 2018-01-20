@@ -8,9 +8,12 @@
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
+    "json-parse-async": "^1.0.3",
     "mysql": "^2.15.0",
+    "react": "^16.2.0",
     "redis": "^2.8.0",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "webpack": "^3.10.0"
   },
   "devDependencies": {},
   "scripts": {

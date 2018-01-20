@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 const redis = require('redis');
+var parseJSON = require('json-parse-async');
 
 const client = redis.createClient("6379"); //hardcoded value of port - original from config file
 
@@ -22,6 +23,9 @@ var connectionPool  = mysql.createPool({ //sample config of mysql
 app.use('/public', express.static(__dirname + '/js'));
 app.use('/public', express.static(__dirname + '/views'));
 app.use('/public', express.static(__dirname + '/vendor'));
+
+
+
 
 // app.use(express.static(__dirname + '/js'));
 // //Store all HTML files in view folder.
@@ -64,18 +68,24 @@ function cache(req, res, next) {
         if (err) throw err;
 
         if (data != null) {
-          var data  = JSON.parse(data);
+          //var data  = JSON.parse(data);
+          parseJSON(data, function(err, content) {
             res.json({
-              data: data,
+              data: content,
               status:"success",
               message : "product fetched successfully"
             })
             return;
+          });
+          
+          
         } else {
             next();
         }
     });
 }
+
+
 // all config and settings being passed in required files
 var settings = {
 	app: app,
