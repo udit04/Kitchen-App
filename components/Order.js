@@ -6,7 +6,14 @@ import React from 'react';
 class Order extends React.Component {
 
 	constructor(){
-	  super(props);
+	  	super();
+	   this.state = {
+	   		data : [],
+	   		productName : "",
+	   		predictedValue : "",
+	   		quantity: "",
+	   		pID: ""
+	   }
 	   this.PlaceOrder = this.PlaceOrder.bind(this);
 	   this.ReRoute = this.ReRoute.bind(this);
 	   this.AddProduct = this.AddProduct.bind(this);
@@ -15,13 +22,6 @@ class Order extends React.Component {
 	   this.handleIDChange = this.handleIDChange.bind(this);
 	   this.handleQtyChange = this.handleQtyChange.bind(this);
 	   this.handleValueChange = this.handleValueChange.bind(this);
-	   this.state({
-	   		data : [],
-	   		productName : "",
-	   		predictedValue : "",
-	   		quantity: "",
-	   		pID: ""
-	   })
 	}
 
 	componentDidMount(){
