@@ -90,9 +90,7 @@ module.exports = function(settings){
 					status:"success",
 					message : "product fetched successfully"
 				}) 
-				return;  
-				
-
+				return;
 		    })
 		});	
 	})

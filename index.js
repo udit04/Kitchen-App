@@ -19,6 +19,8 @@ var connectionPool  = mysql.createPool({ //sample config of mysql
     database : 'heroku_db89e2842543609'
 });
 
+app.use('/public', express.static(__dirname + '/build'));
+
 
 app.use('/public', express.static(__dirname + '/js'));
 app.use('/public', express.static(__dirname + '/views'));
@@ -35,7 +37,7 @@ app.use('/public', express.static(__dirname + '/vendor'));
 app.engine('html', require('ejs').renderFile);
 
 //main entry point for first page
-app.get('/', function(req, res) {
+/*app.get('/', function(req, res) {
   var baseUrl = req.get('host');
   res.render('main.html',{ baseUrl: baseUrl });
 });
@@ -54,35 +56,55 @@ app.get('/order', function(req, res) {
    //    	res.send('Table created');	
    //    }    
    //  });
+});*/
+
+// app.get(/^^\/(order|main)\//, function(req, res) {
+//   var baseUrl = req.get('host');
+//   res.render('ordermain.html',{ baseUrl: baseUrl });
+// });
+app.get('/order', function(req, res) {
+  var baseUrl = req.get('host');
+  res.render('ordermain.html',{ baseUrl: baseUrl });
 });
+
+app.get('/main', function(req, res) {
+  var baseUrl = req.get('host');
+  res.render('ordermain.html',{ baseUrl: baseUrl });
+});
+
 
 // cache middleware - it serves for fetch requests and returns data if key matches and also has data else process moves on to next middleware.
 
 function cache(req, res, next) {
-    var url = req.originalUrl;
-    if(url =="/fetch/products")
-      var key = "products_fetch"; //hardcoded
-    else if(url == "/fetch/orders")
-      var key = "orders_fetch"; //hardcoded
-    client.get(key, function (err, data) {
-        if (err) throw err;
+    if(req.query.type == "new"){
+      next();
+    }
+    else{
+      var url = req.originalUrl;
+      if(url =="/fetch/products")
+        var key = "products_fetch"; //hardcoded
+      else if(url == "/fetch/orders")
+        var key = "orders_fetch"; //hardcoded
+      client.get(key, function (err, data) {
+          if (err) throw err;
 
-        if (data != null) {
-          //var data  = JSON.parse(data);
-          parseJSON(data, function(err, content) {
-            res.json({
-              data: content,
-              status:"success",
-              message : "product fetched successfully"
-            })
-            return;
-          });
-          
-          
-        } else {
-            next();
-        }
-    });
+          if (data != null) {
+            //var data  = JSON.parse(data);
+            parseJSON(data, function(err, content) {
+              res.json({
+                data: content,
+                status:"success",
+                message : "product fetched successfully"
+              })
+              return;
+            });
+            
+            
+          } else {
+              next();
+          }
+      });
+    }   
 }
 
 
