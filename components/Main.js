@@ -29,8 +29,6 @@ class Main extends React.Component {
 		  .then(function (response) {
 		  	console.log(response)
 		    if(response.data.status=="success"){
-		  		alert("product fetched successfully")
-		    	console.log(response.data.data)
 			    that.setState({
 			    	data: response.data.data
 			    })
@@ -55,7 +53,7 @@ class Main extends React.Component {
 		  		var doc = new jsPDF();
 				var sample = "";
 			    response.data.data.forEach(function(row){
-			    	sample = sample + "<tr><td>"+row.ProductName+"</td><td>"+row.CreatedTillNow+"</td><td>"+row.Predicted+"</td></tr>"
+			    	sample = sample + "<tr><td>"+row.ProductName+"</td><td>"+(row.CreatedTillNow ? row.CreatedTillNow : "-")+"</td><td>"+row.Predicted+"</td></tr>"
 			    })
 			    sample = "<h2>Dish Wise Production Report</h2><table><thead><tr><th>Dish Name</th><th>Produced</th><th>Predicted</th></tr></thead><tbody>"+sample+"</tbody></table>";
 			    doc.fromHTML(sample, 20, 20, {
@@ -73,17 +71,12 @@ class Main extends React.Component {
 	}
 
 	StatusUpdate(orderID,createdTillNow){
-		console.log("in here");
-		console.log(orderID);
-		console.log(createdTillNow)
 		axios.post('/confirm-order', {
 		    orderID: orderID,
 		    createdTillNow: createdTillNow
 		  })
 		  .then(function (response) {
 		    if(response.data.status=="success"){
-				  //alert("order placed successfully")
-				//localStorage.setItem('a',  (Math.random() * 999999));
 		  		window.location.reload();
 		  	}
 		  	else{
@@ -99,10 +92,9 @@ class Main extends React.Component {
 	render() {
 		var that = this;
 		var data  = this.state.data;
-		return (
-			
+		return (		
 			<div>
-				<h1>Faasos Kitchen App</h1> <h4>Live Orders</h4>
+				<div style={{"textAlign": "center"}}><h1>Faasos Kitchen App</h1> <h4>Live Orders</h4></div>
 				<div>
 					<table border="1" width="100%" style={{"textAlign": "center"}}>
 						<thead>
@@ -116,19 +108,18 @@ class Main extends React.Component {
 							</tr>
 						</thead>
 						<tbody>
-							{data.map((item,index) => <tr key={index}><td>{item.OrderID}</td><td>{item.ProductName}</td><td>{item.Quantity}</td><td>{item.CreatedTillNow}</td><td>{item.Predicted}</td><td><button onClick={()=>{that.StatusUpdate(item.OrderID,item.CreatedTillNow)}}>Done</button></td></tr> )}
+							{data.map((item,index) => <tr key={index}><td>{item.OrderID}</td><td>{item.ProductName}</td><td>{item.Quantity}</td><td>{item.CreatedTillNow ? item.CreatedTillNow : "-"}</td><td>{item.Predicted}</td><td><button onClick={()=>{that.StatusUpdate(item.OrderID,item.CreatedTillNow)}}>Done</button></td></tr> )}
 						</tbody>
 					</table>
 				</div>
 
-				<div style={{"textAlign": "center","marginTop":"10px"}}>
+				<div style={{"textAlign": "center","marginTop":"30px"}}>
 			        <button onClick={this.PdfReport} >Download Report As PDF</button>
 			    </div>
 
 			</div>
 		)
 	}
-
 }
 
 

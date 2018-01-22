@@ -66,7 +66,6 @@ class Order extends React.Component {
 		axios.get('/fetch/products', {
 		  })
 		  .then(function (response) {
-		  	console.log(response)
 		    if(response.data.status=="success"){
 		  		alert("product fetched successfully")
 			    that.setState({
@@ -86,7 +85,16 @@ class Order extends React.Component {
 	AddProduct(){
 		var pName = this.state.productName;
 		var pValue = this.state.predictedValue;
-		console.log(pName)
+		var flag = true;
+		this.state.data.forEach(function(row){
+			if(row.ProductName.toLowerCase() === pName.toLowerCase())
+				flag = false;
+		})
+		if(flag==false){
+			alert("Product already added");
+			return;
+		}
+		
 		if(!pName || !pValue){
 			alert("Please enter product name and its predicted value")
 			return;
@@ -113,7 +121,6 @@ class Order extends React.Component {
 	PlaceOrder(){
 		var pID = this.state.pID;
 		var pQty = this.state.quantity;
-		console.log(pID)
 		if(!pID || !pQty || pID=="-1"){
 			alert("Please enter quantity and name of product")
 			return;
@@ -147,10 +154,10 @@ class Order extends React.Component {
 		return (
 			
 			<div>
-				<div><button onClick={() => that.ReRoute()}>Back To Kitchen Display</button></div>
+				<div ><button style={{"backgroundColor": "burlywood","marginTop":"30px"}} onClick={this.ReRoute}>Back To Kitchen Display</button></div>
 
-				<div>
-					<table>
+				<div style={{"textAlign": "center","marginTop":"30px"}}>
+					<table  border="1" width="50%">
 						<thead>
 							<tr>
 								<th>Name</th>
@@ -168,8 +175,8 @@ class Order extends React.Component {
 					</table>
 				</div>
 
-				<div>
-					<table>
+				<div style={{"textAlign": "center","marginTop":"30px"}}>
+					<table  border="1" width="50%" >
 						<thead>
 							<tr>
 		                        <th>Name</th>

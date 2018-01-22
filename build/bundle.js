@@ -3174,8 +3174,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   _react2.default.createElement(
     'div',
     null,
-    _react2.default.createElement(_reactRouterDom.Route, { path: "/order", component: _Order2.default }),
-    _react2.default.createElement(_reactRouterDom.Route, { path: "/main", component: _Main2.default })
+    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: "/", component: _Main2.default }),
+    _react2.default.createElement(_reactRouterDom.Route, { path: "/order", component: _Order2.default })
   )
 ), document.getElementById('root')); // app/index.js
 
@@ -3284,7 +3284,6 @@ var Order = function (_React$Component) {
 		value: function FetchProducts() {
 			var that = this;
 			_axios2.default.get('/fetch/products', {}).then(function (response) {
-				console.log(response);
 				if (response.data.status == "success") {
 					alert("product fetched successfully");
 					that.setState({
@@ -3303,7 +3302,15 @@ var Order = function (_React$Component) {
 		value: function AddProduct() {
 			var pName = this.state.productName;
 			var pValue = this.state.predictedValue;
-			console.log(pName);
+			var flag = true;
+			this.state.data.forEach(function (row) {
+				if (row.ProductName.toLowerCase() === pName.toLowerCase()) flag = false;
+			});
+			if (flag == false) {
+				alert("Product already added");
+				return;
+			}
+
 			if (!pName || !pValue) {
 				alert("Please enter product name and its predicted value");
 				return;
@@ -3328,7 +3335,6 @@ var Order = function (_React$Component) {
 		value: function PlaceOrder() {
 			var pID = this.state.pID;
 			var pQty = this.state.quantity;
-			console.log(pID);
 			if (!pID || !pQty || pID == "-1") {
 				alert("Please enter quantity and name of product");
 				return;
@@ -3365,18 +3371,16 @@ var Order = function (_React$Component) {
 					null,
 					_react2.default.createElement(
 						'button',
-						{ onClick: function onClick() {
-								return that.ReRoute();
-							} },
+						{ style: { "backgroundColor": "burlywood", "marginTop": "30px" }, onClick: this.ReRoute },
 						'Back To Kitchen Display'
 					)
 				),
 				_react2.default.createElement(
 					'div',
-					null,
+					{ style: { "textAlign": "center", "marginTop": "30px" } },
 					_react2.default.createElement(
 						'table',
-						null,
+						{ border: '1', width: '50%' },
 						_react2.default.createElement(
 							'thead',
 							null,
@@ -3427,10 +3431,10 @@ var Order = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'div',
-					null,
+					{ style: { "textAlign": "center", "marginTop": "30px" } },
 					_react2.default.createElement(
 						'table',
-						null,
+						{ border: '1', width: '50%' },
 						_react2.default.createElement(
 							'thead',
 							null,
@@ -5888,8 +5892,6 @@ var Main = function (_React$Component) {
 			_axios2.default.get('/fetch/orders', {}).then(function (response) {
 				console.log(response);
 				if (response.data.status == "success") {
-					alert("product fetched successfully");
-					console.log(response.data.data);
 					that.setState({
 						data: response.data.data
 					});
@@ -5912,7 +5914,7 @@ var Main = function (_React$Component) {
 					var doc = new _jspdf2.default();
 					var sample = "";
 					response.data.data.forEach(function (row) {
-						sample = sample + "<tr><td>" + row.ProductName + "</td><td>" + row.CreatedTillNow + "</td><td>" + row.Predicted + "</td></tr>";
+						sample = sample + "<tr><td>" + row.ProductName + "</td><td>" + (row.CreatedTillNow ? row.CreatedTillNow : "-") + "</td><td>" + row.Predicted + "</td></tr>";
 					});
 					sample = "<h2>Dish Wise Production Report</h2><table><thead><tr><th>Dish Name</th><th>Produced</th><th>Predicted</th></tr></thead><tbody>" + sample + "</tbody></table>";
 					doc.fromHTML(sample, 20, 20, {});
@@ -5928,16 +5930,11 @@ var Main = function (_React$Component) {
 	}, {
 		key: 'StatusUpdate',
 		value: function StatusUpdate(orderID, createdTillNow) {
-			console.log("in here");
-			console.log(orderID);
-			console.log(createdTillNow);
 			_axios2.default.post('/confirm-order', {
 				orderID: orderID,
 				createdTillNow: createdTillNow
 			}).then(function (response) {
 				if (response.data.status == "success") {
-					//alert("order placed successfully")
-					//localStorage.setItem('a',  (Math.random() * 999999));
 					window.location.reload();
 				} else {
 					alert("Could not update status! Try Again.");
@@ -5956,15 +5953,19 @@ var Main = function (_React$Component) {
 				'div',
 				null,
 				_react2.default.createElement(
-					'h1',
-					null,
-					'Faasos Kitchen App'
-				),
-				' ',
-				_react2.default.createElement(
-					'h4',
-					null,
-					'Live Orders'
+					'div',
+					{ style: { "textAlign": "center" } },
+					_react2.default.createElement(
+						'h1',
+						null,
+						'Faasos Kitchen App'
+					),
+					' ',
+					_react2.default.createElement(
+						'h4',
+						null,
+						'Live Orders'
+					)
 				),
 				_react2.default.createElement(
 					'div',
@@ -6035,7 +6036,7 @@ var Main = function (_React$Component) {
 									_react2.default.createElement(
 										'td',
 										null,
-										item.CreatedTillNow
+										item.CreatedTillNow ? item.CreatedTillNow : "-"
 									),
 									_react2.default.createElement(
 										'td',
@@ -6060,7 +6061,7 @@ var Main = function (_React$Component) {
 				),
 				_react2.default.createElement(
 					'div',
-					{ style: { "textAlign": "center", "marginTop": "10px" } },
+					{ style: { "textAlign": "center", "marginTop": "30px" } },
 					_react2.default.createElement(
 						'button',
 						{ onClick: this.PdfReport },

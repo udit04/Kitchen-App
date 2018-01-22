@@ -2,8 +2,10 @@ module.exports = function(settings){
 	
 	var app = settings.app; // express instance
 	var connectionPool = settings.connectionPool; // mysql conenction pool
-	var cache = settings.cache; //middleware function
-	var client = settings.client; //redis client to perform operations
+
+	//var cache = settings.cache; //middleware function
+	//var client = settings.client; //redis client to perform operations
+
 	/*
 		@apiName - insert/product
 		@params -> pName - product name
@@ -39,7 +41,7 @@ module.exports = function(settings){
 					})
 					return;
 				}
-				client.del("products_fetch"); // deletes this key so as to fetch data again from db.
+				//client.del("products_fetch"); // deletes this key so as to fetch data again from db.
 				res.json({
 					status:"success",
 					message : "product inserted successfully"
@@ -55,7 +57,7 @@ module.exports = function(settings){
 		@success - string "success" with data
 		@fail - string "fail"
 	*/
-	app.get("/fetch/products",cache,function(req,res){
+	app.get("/fetch/products",function(req,res){
 		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
@@ -84,7 +86,7 @@ module.exports = function(settings){
 				rows.forEach(function(row){
 					data.push(row)
 				})
-				client.set("products_fetch", JSON.stringify(data)); // sets key with returned data
+				//client.set("products_fetch", JSON.stringify(data)); // sets key with returned data
 				res.json({
 					data: data,
 					status:"success",
@@ -144,7 +146,7 @@ module.exports = function(settings){
 		@success - string "success" with data
 		@fail - string "fail"
 	*/
-	app.get("/fetch/orders",cache,function(req,res){
+	app.get("/fetch/orders",function(req,res){
 		connectionPool.getConnection(function(err, connection) {
 			if(err){
 				res.json({
@@ -173,7 +175,7 @@ module.exports = function(settings){
 				rows.forEach(function(row){
 					data.push(row)
 				})
-				client.setex("orders_fetch", 10, JSON.stringify(data));
+				//client.setex("orders_fetch", 10, JSON.stringify(data));
 				res.json({
 					data: data,
 					status:"success",

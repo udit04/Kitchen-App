@@ -8,8 +8,9 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 render(
 	<Router >
 		<div>
+            <Route exact path={"/"} component={Main}/>
 	        <Route path={"/order"} component={Order}/>
-	        <Route path={"/main"} component={Main}/>
+	        
         </div>
     </Router>
     ,

@@ -1,9 +1,9 @@
 var express = require('express');
 var app = express();
-const redis = require('redis');
+//const redis = require('redis');
 var parseJSON = require('json-parse-async');
 
-const client = redis.createClient("6379"); //hardcoded value of port - original from config file
+//const client = redis.createClient("6379"); //hardcoded value of port - original from config file
 
 var bodyParser = require('body-parser')
 app.set('port', (process.env.PORT || 5000));
@@ -20,8 +20,6 @@ var connectionPool  = mysql.createPool({ //sample config of mysql
 });
 
 app.use('/public', express.static(__dirname + '/build'));
-
-
 app.use('/public', express.static(__dirname + '/js'));
 app.use('/public', express.static(__dirname + '/views'));
 app.use('/public', express.static(__dirname + '/vendor'));
@@ -67,7 +65,7 @@ app.get('/order', function(req, res) {
   res.render('ordermain.html',{ baseUrl: baseUrl });
 });
 
-app.get('/main', function(req, res) {
+app.get('/', function(req, res) {
   var baseUrl = req.get('host');
   res.render('ordermain.html',{ baseUrl: baseUrl });
 });
@@ -111,9 +109,10 @@ function cache(req, res, next) {
 // all config and settings being passed in required files
 var settings = {
 	app: app,
-	connectionPool: connectionPool,
-  cache: cache,
-  client: client
+  connectionPool: connectionPool
+  //,
+  //cache: cache,
+  //client: client
 }
 
 require(__dirname + "/routes/api.js")(settings);
